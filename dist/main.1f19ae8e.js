@@ -139,7 +139,14 @@ var hash = {
   s: "sohu.com",
   z: "zhihu.com",
   m: "mcdonalds.com.cn"
-}; // 遍历 keys，生成 kbd 标签
+}; // 取出 localStorage 中的 zzz 对应的 hash
+
+var hashInLocalStorage = JSON.parse(localStorage.getItem("zzz") || "null");
+
+if (hashInLocalStorage) {
+  hash = hashInLocalStorage;
+} // 遍历 keys，生成 kbd 标签
+
 
 var index = 0;
 
@@ -155,6 +162,22 @@ while (index < keys["length"]) {
     // 0-9 0-8 0-6
     kbdXXX = document.createElement("kbd");
     kbdXXX.textContent = row[index2];
+    buttonX = document.createElement("button");
+    buttonX.textContent = "编辑";
+    buttonX.id = row[index2];
+
+    buttonX.onclick = function (xxxxx) {
+      // xxxxx.target 就是用户点击的元素
+      key = xxxxx.target["id"]; // q w e r t
+
+      x = prompt("给我一个网址"); // qq.com
+
+      hash[key] = x; // hash 变更
+
+      localStorage.setItem("zzz", JSON.stringify(hash));
+    };
+
+    kbdXXX.appendChild(buttonX);
     div1.appendChild(kbdXXX);
     index2 += 1;
   }
@@ -196,7 +219,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52878" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56068" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

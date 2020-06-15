@@ -22,6 +22,12 @@ let hash = {
   m: "mcdonalds.com.cn",
 };
 
+// 取出 localStorage 中的 zzz 对应的 hash
+let hashInLocalStorage = JSON.parse(localStorage.getItem("zzz") || "null");
+if (hashInLocalStorage) {
+  hash = hashInLocalStorage;
+}
+
 // 遍历 keys，生成 kbd 标签
 let index = 0;
 while (index < keys["length"]) {
@@ -35,6 +41,17 @@ while (index < keys["length"]) {
     // 0-9 0-8 0-6
     kbdXXX = document.createElement("kbd");
     kbdXXX.textContent = row[index2];
+    buttonX = document.createElement("button");
+    buttonX.textContent = "编辑";
+    buttonX.id = row[index2];
+    buttonX.onclick = (xxxxx) => {
+      // xxxxx.target 就是用户点击的元素
+      key = xxxxx.target["id"]; // q w e r t
+      x = prompt("给我一个网址"); // qq.com
+      hash[key] = x; // hash 变更
+      localStorage.setItem("zzz", JSON.stringify(hash));
+    };
+    kbdXXX.appendChild(buttonX);
     div1.appendChild(kbdXXX);
     index2 += 1;
   }
