@@ -1,0 +1,26 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+a {
+  text-decoration: none;
+}
+main {
+  text-align: center;
+}
+kbd {
+  border: 1px solid red;
+  width: 2em;
+  height: 2em;
+  display: inline-block;
+  text-transform: uppercase;
+}
+#mainXXX > div:nth-child(2) {
+  margin-left: 1em;
+}
+#mainXXX > div:nth-child(3) {
+  margin-left: 2em;
+}
+
+
+/*# sourceMappingURL=/style.e308ff8e.css.map */
