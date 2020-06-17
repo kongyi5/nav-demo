@@ -118,104 +118,140 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"main.js":[function(require,module,exports) {
-var keys = {
-  0: ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
-  1: ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
-  2: ["z", "x", "c", "v", "b", "n", "m"],
-  length: 3
-};
-var hash = {
-  q: "qq.com",
-  w: "weibo.com",
-  e: "ele.me",
-  r: "renren.com",
-  t: "tianya.com",
-  y: "youtube.com",
-  u: "uc.com",
-  i: "iqiyi.com",
-  o: "opera.com",
-  p: "pornhub.com",
-  a: "acfun.com",
-  s: "sohu.com",
-  z: "zhihu.com",
-  m: "mail.qq.com"
-}; // 取出 localStorage 中的 zzz 对应的 hash
+// 1. 初始化数据
+var hashA = init();
+var keys = hashA["keys"];
+var hash = hashA["hash"]; // 2.生成键盘
 
-var hashInLocalStorage = JSON.parse(localStorage.getItem("zzz") || "null");
+generateKeyBoard(keys, hash); // 3.监听用户动作
 
-if (hashInLocalStorage) {
-  hash = hashInLocalStorage;
-} // 遍历 keys，生成 kbd 标签
+listenToUser(hash); // 下面是工具函数
 
+function getFromLocalStorage(name) {
+  return JSON.parse(localStorage.getItem(name) || "null");
+}
 
-var index = 0;
+function createTag(tagName) {
+  return document.createElement(tagName);
+}
 
-while (index < keys["length"]) {
-  // 0 1 2
-  var div1 = document.createElement("div");
-  div1.className = "row";
-  main.appendChild(div1);
-  row = keys[index]; // 第一个数组 第二个数组 第三个数组
+function createSpan(textContent) {
+  var span = createTag("span");
+  span.textContent = textContent;
+  span.className = "text";
+  return span;
+}
 
-  var index2 = 0;
+function createButton(id) {
+  var button = createTag("button");
+  button.textContent = "编辑";
+  button.id = id;
 
-  while (index2 < row["length"]) {
-    // 0-9 0-8 0-6
-    kbd = document.createElement("kbd");
-    span = document.createElement("span");
-    span.textContent = row[index2];
-    span.className = "text";
-    kbd.appendChild(span);
-    kbd.className = "key";
-    button = document.createElement("button");
-    button.textContent = "编辑";
-    button.id = row[index2];
-    img = document.createElement("img");
+  button.onclick = function (xxxxx) {
+    // xxxxx.target 就是用户点击的元素
+    var button2 = xxxxx.target;
+    var img2 = button2.previousSibling;
+    var key = button2["id"]; // q w e r t
 
-    if (hash[row[index2]]) {
-      img.src = "http://" + hash[row[index2]] + "/favicon.ico";
-    } else {
-      img.src = "//i.loli.net/2017/11/10/5a05afbc5e183.png";
-    }
+    var x = prompt("给我一个网址"); // qq.com
 
-    img.onerror = function (xxx) {
+    hash[key] = x; // hash 变更
+
+    img2.src = "http://" + x + "/favicon.ico";
+
+    img2.onerror = function (xxx) {
       xxx.target.src = "//i.loli.net/2017/11/10/5a05afbc5e183.png";
     };
 
-    button.onclick = function (xxxxx) {
-      // xxxxx.target 就是用户点击的元素
-      button2 = xxxxx.target;
-      img2 = button2.previousSibling;
-      key = button2["id"]; // q w e r t
+    localStorage.setItem("zzz", JSON.stringify(hash));
+  };
 
-      x = prompt("给我一个网址"); // qq.com
-
-      hash[key] = x; // hash 变更
-
-      img2.src = "http://" + x + "/favicon.ico";
-
-      img2.onerror = function (xxx) {
-        xxx.target.src = "//i.loli.net/2017/11/10/5a05afbc5e183.png";
-      };
-
-      localStorage.setItem("zzz", JSON.stringify(hash));
-    };
-
-    kbd.appendChild(img);
-    kbd.appendChild(button);
-    div1.appendChild(kbd);
-    index2 += 1;
-  }
-
-  index += 1;
+  return button;
 }
 
-document.onkeypress = function (xxx) {
-  var key = xxx["key"];
-  website = hash[key]; // location.href = "http://" + website;
+function createImage(domain) {
+  var img = createTag("img");
 
-  window.open("https://" + website, "_blank");
-};
+  if (domain) {
+    img.src = "http://" + domain + "/favicon.ico";
+  } else {
+    img.src = "//i.loli.net/2017/11/10/5a05afbc5e183.png";
+  }
+
+  img.onerror = function (xxx) {
+    xxx.target.src = "//i.loli.net/2017/11/10/5a05afbc5e183.png";
+  };
+
+  return img;
+}
+
+function init() {
+  var keys = {
+    0: ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
+    1: ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
+    2: ["z", "x", "c", "v", "b", "n", "m"],
+    length: 3
+  };
+  var hash = {
+    q: "qq.com",
+    w: "weibo.com",
+    e: "ele.me",
+    r: "renren.com",
+    t: "tianya.com",
+    y: "youtube.com",
+    u: "uc.com",
+    i: "iqiyi.com",
+    o: "opera.com",
+    p: "pornhub.com",
+    a: "acfun.com",
+    s: "sohu.com",
+    z: "zhihu.com",
+    m: "mail.qq.com"
+  }; // 取出 localStorage 中的 zzz 对应的 hash
+
+  var hashInLocalStorage = getFromLocalStorage("zzz");
+
+  if (hashInLocalStorage) {
+    hash = hashInLocalStorage;
+  }
+
+  return {
+    keys: keys,
+    hash: hash
+  };
+}
+
+function generateKeyBoard(keys, hash) {
+  // 遍历 keys，生成 kbd 标签
+  for (var index = 0; index < keys["length"]; index += 1) {
+    // 0 1 2
+    var div1 = createTag("div");
+    div1.className = "row";
+    main.appendChild(div1);
+    var row = keys[index]; // 第一个数组 第二个数组 第三个数组
+
+    for (var index2 = 0; index2 < row["length"]; index2 += 1) {
+      // 0-9 0-8 0-6
+      var span = createSpan(row[index2]);
+      var button = createButton(row[index2]);
+      var img = createImage(hash[row[index2]]);
+      var kbd = createTag("kbd");
+      kbd.className = "key";
+      kbd.appendChild(span);
+      kbd.appendChild(img);
+      kbd.appendChild(button);
+      div1.appendChild(kbd);
+    }
+  }
+}
+
+function listenToUser(hash) {
+  document.onkeypress = function (xxx) {
+    var key = xxx["key"];
+    var website = hash[key];
+    window.open("https://" + website, "_blank");
+  };
+}
 },{}],"../../../AppData/Local/Yarn/Data/global/node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -244,7 +280,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54243" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57734" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

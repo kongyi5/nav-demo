@@ -6,7 +6,7 @@ a {
   text-decoration: none;
 }
 body {
-  background: grey url(wall.d803ad20.jpg) no-repeat center center;
+  background: grey url(/wall.d803ad20.jpg) no-repeat center center;
   background-size: cover;
 }
 main {
@@ -77,5 +77,6 @@ kbd:hover > button {
   left: 4px;
   top: 2px;
 }
+
 
 /*# sourceMappingURL=/style.e308ff8e.css.map */
